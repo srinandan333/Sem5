@@ -1,0 +1,106 @@
+---
+title: "PES1UG20CS596"
+author: "Srinandan A"
+date: "2022-09-17"
+output: pdf_document
+---
+
+```{r}
+#PROBLEM 0
+library(tidyverse)
+library(corrplot)
+library(olsrr)
+library(caret)
+library(caTools)
+df <- read.csv("C:/Users/srina_1pv/Downloads/DA Assignment/2b - MLR (Lecture Hour 25)/spotify.csv")
+```
+
+Importing required libraries and reading the csv file.
+
+```{r}
+#PROBLEM 1
+summary(is.na(df))
+sum(is.na(df))
+df_new <- data.frame(scale(df)) 
+```
+
+There are no NA values. Hence, we normalize the dataset and proceed.
+
+```{r}
+#PROBLEM 2
+model_full <- lm(energy~ ., data = df)
+summary(model_full)
+```
+
+Residuals: As we can see there is quite a bit of error in our model.  
+t value: The t values of some of the features are greater than 2 or lesser than -2. We can say that those features will most likely be predictors of the target variable.
+Pr(>|t|): Some of the p values are less than the confidence interval 0.05. We can say that those features will most likely be predictors of the target variable.
+R-Squared: 0.844 signifies that our model explains around 84.4% of the data.
+Adjusted R-Squared: Same as R-squared but takes into account how many samples you have and how many variables you’re using.
+The F-Statistic: The f statistic being quite a large value tells us that there is some significant feature in our model.
+
+```{r}
+#PROBLEM 3
+res<-cor(df)
+corrplot(res, method="pie")
+ols_plot_added_variable(model_full, print_plot = TRUE)
+
+df_new<-data.frame(df$danceability, df$acousticness, df$loudness, df$valence, df$energy)
+model_reduced = lm(df.energy~ ., data = df_new)
+summary(model_reduced)
+```
+
+I chose the features mentioned above after considering the f values, p values, correlogram and scatter plot. All of them signify that these are the most significant features.
+The summary of the model confirms my choice(See f values, p values and significance codes).
+
+```{r}
+#PROBLEM 4
+anova(model_reduced, model_full)
+```
+
+H0: All coefficients removed from the full model are zero.
+HA: At least one of the coefficients removed from the full model is non-zero.
+
+
+```{r}
+#PROBLEM 5
+model_aic <- ols_step_backward_aic(model_full)
+plot(model_aic)
+summary(model_aic$model)
+```
+
+As we can see from the graph, the Aic model removes a few features step by step and retains a few features in the end. It contains a couple more features than my reduced model with my features of choice.
+
+```{r}
+#PROBLEM 6
+ols_plot_resid_hist(model_full, print_plot = TRUE)
+ols_plot_resid_hist(model_reduced, print_plot = TRUE)
+ols_plot_resid_hist(model_aic$model, print_plot = TRUE)
+```
+
+As we can see, the models we built are pretty accurate (around 84%), the best one being the AIC model. We can also say that the variance of the models are normally distributed.
+
+```{r}
+#PROBLEM 7
+ols_vif_tol(model_full)
+ols_plot_cooksd_bar(model_full)
+ols_plot_cooksd_chart(model_full)
+
+cooksd = cooks.distance(model_full)
+plot(cooksd)
+
+n = nrow(df)
+infl <- as.numeric(names(cooksd)[(cooksd > (4/n))])
+
+df = df[-infl,]
+view(df)
+model_full = lm(energy~acousticness+danceability+loudness+valence,data=df)
+summary(model_full)
+anova(model_full)
+ols_plot_cooksd_chart(model_full)
+
+cooksd2 = cooks.distance(model_full)
+plot(cooksd2)
+```
+
+As we can see, the model of the new data set is slightly better.

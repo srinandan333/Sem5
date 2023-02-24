@@ -1,0 +1,171 @@
+---
+title: "PES1UG20CS596"
+author: "Srinandan A"
+date: "2022-08-25"
+output: word_document
+---
+
+#LOADING REQUIRED LIBRARIES
+
+```{r}
+library(tidyverse)
+library(dbplyr)
+library(stringi)
+library(ggplot2)
+```
+
+The libraries required for this assignment are tidyverse, dblyr, stringi and ggplot2.
+
+#READING CSV FILE
+
+```{r}
+data<-read.csv("C:/Users/srina_1pv/OneDrive/Documents/Datasets/top_1000_instagrammers.csv")
+```
+
+The dataset is in the form of a csv file which we are downloading from kaggle and using it in this assignment.
+
+#CLEANING DATA
+
+```{r}
+for (i in seq(1,1000)) 
+{
+  char <- stri_sub(data$Followers[i],-1)
+  if (char == "K") 
+  {
+    data$Followers[i] <- gsub("K", "", as.character(data$Followers[i]))
+    data$Followers[i] = as.numeric(data$Followers[i]) * 1000
+  }
+  else if (char == "M") 
+  {
+    data$Followers[i] <- gsub("M", "", as.character(data$Followers[i]))
+    data$Followers[i] = as.numeric(data$Followers[i]) * 1000000
+  }
+  else 
+  {
+    data$Followers[i] = as.numeric(data$Followers[i])
+  }
+}
+
+for (i in seq(1,1000)) 
+{
+  char <- stri_sub(data$Authentic.Engagement[i],-1)
+  if (char == "K") 
+  {
+    data$Authentic.Engagement[i] <- gsub("K", "", as.character(data$Authentic.Engagement[i]))
+    data$Authentic.Engagement[i] = as.numeric(data$Authentic.Engagement[i]) * 1000
+  }
+  else if (char == "M") 
+  {
+    data$Authentic.Engagement[i] <- gsub("M", "", as.character(data$Authentic.Engagement[i]))
+    data$Authentic.Engagement[i] = as.numeric(data$Authentic.Engagement[i]) * 1000000
+  }
+  else 
+  {
+    data$Authentic.Engagement[i] = as.numeric(data$Authentic.Engagement[i])
+  }
+}
+
+for (i in seq(1,1000)) 
+{
+  char <- stri_sub(data$Engagement.Avg.[i],-1)
+  if (char == "K") 
+  {
+    data$Engagement.Avg.[i] <- gsub("K", "", as.character(data$Engagement.Avg.[i]))
+    data$Engagement.Avg.[i] = as.numeric(data$Engagement.Avg.[i]) * 1000
+  }
+  else if (char == "M") 
+  {
+    data$Engagement.Avg.[i] <- gsub("M", "", as.character(data$Engagement.Avg.[i]))
+    data$Engagement.Avg.[i] = as.numeric(data$Engagement.Avg.[i]) * 1000000
+  }
+  else 
+  {
+    data$Engagement.Avg.[i] = as.numeric(data$Engagement.Avg.[i])
+  }
+}
+
+data$Followers<-as.numeric(data$Followers)
+data$Authentic.Engagement<-as.numeric(data$Authentic.Engagement)
+data$Engagement.Avg.<-as.numeric(data$Engagement.Avg.)
+```
+
+We can see that a few columns are in character format while we need them to be in numeric for the purpose of our calculations. So, we convert them to numeric based on whether they have 'M' or 'K' which denote 'million and 'thousand' respectively.
+
+#PROBLEM 1
+
+```{r}
+summary(data$Followers)
+modeof <- function(v) 
+{
+  uv <- unique(v)
+  uv[which.max(tabulate(match(v, uv)))]
+}
+ans <- modeof(data$Followers)
+print(ans)
+sd(data$Followers)
+
+summary(data$Authentic.Engagement)
+modeof <- function(v) 
+{
+  uv <- unique(v)
+  uv[which.max(tabulate(match(v, uv)))]
+}
+ans <- modeof(data$Authentic.Engagement)
+print(ans)
+sd(data$Authentic.Engagement)
+
+summary(data$Engagement.Avg.)
+modeof <- function(v) 
+{
+  uv <- unique(v)
+  uv[which.max(tabulate(match(v, uv)))]
+}
+ans <- modeof(data$Engagement.Avg.)
+print(ans)
+sd(data$Engagement.Avg.)
+```
+
+Here, we can see that there is a large range between the minimum and maximum number of followers(1.8M and 528.4M). The mode being 7.3M and mean being 26M indicates  that it is not a normal distribution but a right skewed one.
+Considering authentic engagement and engagement average, we see that the numbers are significantly lower indicating that celebrities do not engage quite as much. Also, the mode is 0 indicating that many celebrities do not engage at all.
+
+#PROBLEM 2
+
+```{r}
+v<-aggregate(data$Followers, list(data$Audience.Country), FUN=sum)
+ggplot(v, aes(x=Group.1, y=x), col = "blue") + geom_col() + coord_flip()
+data1<-data %>% filter(grepl('India', Audience.Country))
+sum(data1$Followers)
+nrow(data1)
+```
+
+Here, we have constructed a histogram using audience country and number of followers. We can see that United States tops the list, followed by Brazil and then India. Hence, to answer your question, India ranks 3rd with around 5.6B follows by being the audience for 159 countries.
+
+#PROBLEM 3
+
+```{r}
+boxplot(data$Authentic.Engagement, varwidth = TRUE, main = "Boxplot", xlab="Authentic Engagement", horizontal = TRUE, col = "blue")
+```
+
+Here, we have constructed a box and whisker plot using authentic engagement. We can see that there are several outliers indicating that this is not a normal distribution but a right skewed one. The box and whisker plot itself is positively skewed.
+
+#PROBLEM 4
+
+```{r}
+data2<-data %>% filter(grepl('United States', Audience.Country))
+a<-nrow(data2)
+b<-nrow(data)
+perc<-(a/b)*100
+print(perc)
+
+```
+
+The top 3 audience countries are United States, India and Brazil, in that order. This can be seen clearly in the histogram we created earlier. The percentage of the top 1000 instagrammers that have United States as their audience is 27.7 %.
+
+#CONCLUSION
+
+On the other hand, my instagram stats are pathetic compared to these.My account is private, has around 200 followers, and engagement is maybe 20.
+If i were to become an influencer, i would do the following things:
+1) socialize more
+2) put out good content
+3) create a public account
+4) not do or say anything stupid

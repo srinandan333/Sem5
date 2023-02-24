@@ -1,0 +1,79 @@
+---
+title: "PES1UG20CS596"
+author: "Srinandan A"
+date: "2022-09-17"
+output: pdf_document
+---
+
+```{r}
+#PROBLEM 0
+library(ggplot2)
+df <- read.csv("C:/Users/srina_1pv/Downloads/DA Assignment/2a (Lecture hour 19)/dragon_neurons.csv")
+```
+
+Importing necessary libraries and reading csv file.
+
+```{r}
+#PROBLEM 1
+lm <- lm(formula = conduction_velocity ~ axon_diameter, data = df)
+summary(lm)
+
+ggplot(df, aes(x=axon_diameter, y=conduction_velocity), col="blue") + 
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+Yes, a linear model is appropriate for representing the relationship between the conduction velocity
+(response variable) and axon diameter (explanatory variable).
+
+```{r}
+#PROBLEM 2
+res <- resid(lm)
+plot(fitted(lm), res, col="blue")
+abline(0,0)
+qqnorm(res)
+
+df_new<-log(df$axon_diameter)
+plot(df_new, res, col="blue")
+abline(0, 0)
+```
+
+As we can see, there is not much white noise in the given data set.
+
+```{r}
+#PROBLEM 3
+model <- df[c("axon_diameter" ,"conduction_velocity")]
+center <- colMeans(model)
+cov <- cov(model)
+rad <- sqrt(qchisq(p=0.95, df=2))
+
+ellipse <- car::ellipse(center=center, shape=cov, radius=rad, segments=150, draw=FALSE)
+ellipse <- as.data.frame(ellipse)
+colnames(ellipse) <- colnames(model)
+
+ggplot(model , aes(x=axon_diameter, y=conduction_velocity)) +
+  geom_point(size = 2) +
+  geom_polygon(data=ellipse , fill="blue", color="blue", alpha=0.5) +
+  geom_point(aes(center[1] , center[2]) , size=5 , color="red") +
+  geom_text(aes(label=row.names(model)), hjust=1, vjust=-1.5, size=2.5)
+distances <- mahalanobis(x = model , center = center , cov = cov)
+distances
+cutoff <- qchisq(p = 0.95 , df = ncol(model))
+model[distances > cutoff ,]
+```
+
+Yes, there are a few outliers in the given data set.
+
+```{r}
+#PROBLEM 4
+summary(lm)$r.squared 
+```
+
+The r-squared value is a indicator of how good our model is. In this case, our model is correct about around 76.56% of the data.
+
+```{r}
+#PROBLEM 5
+summary(lm)
+```
+
+We can say that the conuction velocity is influenced significantly by the axon diameter by looking at the f value, p value and significance codes in the above summary.

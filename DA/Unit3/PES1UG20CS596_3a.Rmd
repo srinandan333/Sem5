@@ -1,0 +1,104 @@
+---
+title: "PES1UG20CS596"
+author: "Srinandan A"
+date: "2022-10-15"
+output:
+  word_document: default
+  pdf_document: default
+---
+
+#PROBLEM 0
+
+```{r}
+library(tidyverse)
+library(fpp2)
+library(forecast)
+library(MLmetrics)
+
+df <- read_csv("C:/Users/srina_1pv/Downloads/DA Assignment/35-Basic Forecasting Techniques/sales.csv")
+head(df)
+
+sales <- df$Sales
+head(sales)
+
+sales_ts <- ts(sales, frequency = 52, start=c(2010, 2, 5))
+sales_ts
+plot.ts(sales_ts)
+```
+
+We have imported the necessary libraries and read the data set.
+
+#PROBLEM 1
+
+```{r}
+components = decompose(sales_ts)
+plot(components)
+```
+
+We have decomposed the time series dataset into its components and plotted them.
+
+#PROBLEM 2
+
+```{r}
+plot(sales_ts)
+SEM = HoltWinters(sales_ts, beta = FALSE, gamma = FALSE)
+lines(SEM$fitted[,1], lty=2, col="red")
+
+DEM = HoltWinters(sales_ts, gamma = FALSE)
+lines(DEM$fitted[,1], lty=2, col="blue")
+
+TEM = HoltWinters(sales_ts)
+lines(TEM$fitted[,1], lty=2, col="green")
+```
+
+We have plotted the forecasts made using SEM, DEM, and TEM for the given data set.
+
+#PROBLEM 3
+
+```{r}
+REG = lm(formula = Sales ~ Holiday_Flag+Temperature+Fuel_Price+CPI+Laptop_Demand, data = df )
+summary(REG)
+
+plot(x = df$Sales, y = REG$fitted.values, xlab = "Actual Values", ylab = "Model Values",
+     main = "Regression fit")
+abline(b = 1, a = 0)
+```
+
+We have plotted the forecasts made using regression and plotted it.
+
+#PROBLEM 4
+
+```{r}
+demand <- ts(df$Laptop_Demand, frequency = 52)
+plot.ts(demand)
+
+x = ma(demand, order = 4)
+lines(x, col = "blue")
+plot(forecast(x,143))
+```
+
+We have plotted the forecast of the laptop_demand column of the dataset.
+
+#PROBLEM 5
+
+```{r}
+MAPE(REG$fitted.values,sales_ts)
+MAPE(SEM$fitted[,1],sales_ts)
+MAPE(DEM$fitted[,1],sales_ts)
+MAPE(TEM$fitted[,1],sales_ts)
+
+RMSE(REG$fitted.values,sales_ts)
+RMSE(SEM$fitted[,1],sales_ts)
+RMSE(DEM$fitted[,1],sales_ts)
+RMSE(TEM$fitted[,1],sales_ts)
+```
+
+The order of the forecasts which worked best for the given data set are:
+1) Triple Exponential Smoothing
+2) Regression
+3) Single Exponential Smoothing
+4) Double Exponential Smoothing 
+
+TEM takes into account that seasonal effect when predicting new values. Hence, it is the best model for sales data as sales data generally have a significant seasonal component.
+
+Both SEM and DEM do not take into account the seasonal effect when predicting new values. Hence, they perform similarly.

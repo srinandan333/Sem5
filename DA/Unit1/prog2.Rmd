@@ -1,0 +1,139 @@
+---
+title: "PES1UG20CS596"
+author: "Srinandan A"
+date: "2022-08-25"
+output: word_document
+---
+
+#LOADING LIBRARIES
+
+We are loading the required libraries.
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+```
+
+#READING DATA
+
+We are loading the given dataset.
+
+```{r}
+df<-read.csv("C:/Users/srina_1pv/OneDrive/Documents/Datasets/CharlesBookClubDataset.csv")
+```
+
+#PROBLEM 1
+
+```{r}
+summary(df$M)
+summary(df$R) 
+summary(df$F) 
+summary(df$FirstPurch)
+sd(df$M, na.rm = TRUE)
+sd(df$R, na.rm = TRUE)
+sd(df$F, na.rm = TRUE)
+sd(df$FirstPurch)
+summary(is.na(df))
+```
+
+Here, we have used the summary() function which gives min, max, mean, median, 1st quartile and 3rd quartile. We have calculated standard deviation separately using the sd() function. Finally, we have displayed the count/actual(FALSE) and missing count/NA(TRUE) values.
+
+#PROBLEM 2
+
+```{r}
+hist(df$M, col = "blue")
+hist(df$R, col = "blue")
+hist(df$F, col = "blue")
+
+modeof <- function(v) 
+{
+  uv <- unique(v)
+  uv[which.max(tabulate(match(v, uv)))]
+}
+
+df$M[is.na(df$M)]<-mean(df$M,na.rm=TRUE)
+df$M <- as.numeric(df$M)
+sum(is.na(df$M))
+
+df$R[is.na(df$R)]<-median(df$R,na.rm=TRUE)
+df$R <- as.numeric(df$R)
+sum(is.na(df$R))
+
+df$F[is.na(df$F)]<-modeof(df$F)
+df$R <- as.numeric(df$R)
+sum(is.na(df$F))
+
+hist(df$M, col = "blue")
+hist(df$R, col = "blue")
+hist(df$F, col = "blue")
+```
+
+First, we take a look at the histograms. 
+Since the histogram of Monetary is almost a normal distribution, we can use mean of the values to replace the NA values.
+Since the histogram of Recency is a skewed, we can use the median of the values to replace the NA values.
+Since the histogram of Frequency is mostly just the one bar in the beginning, we can use the mode of the values to replace the NA values.
+Now, when we plot the histograms of all the three again, we can see that they have not changed by a significant degree thus confirming that our methods of replacement are appropriate.
+
+#PROBLEM 3
+
+```{r}
+df$Mcode <- cut(df$M,breaks = 50, dig.lab = 3)
+summary(df$Mcode)
+
+df$Rcode <- cut(df$R, breaks = 50, dig.lab = 3)
+summary(df$Rcode)
+
+df$Fcode <- cut(df$F, breaks = 50, dig.lab = 3)
+summary(df$Fcode)
+```
+
+Here, we use the cut() function to discretize the 3 vectors.
+We have also obtained the summary using the summary() function.
+By trial and error method, i tried varied number of bins and have found that bin size of 5 was ideal. It includes all outliers and divides 50 evenly into 10 bins.
+A statistical function to obtain optimal bin size could consist of something of like (max-min)/number of bins.
+
+#PROBLEM 4.1
+
+```{r}
+df$Mcode <- as.numeric(df$Mcode)
+df$Rcode <- as.numeric(df$Rcode)
+df$Fcode <- as.numeric(df$Fcode)
+
+hist(df$Mcode, col = "blue")
+hist(df$Rcode, col = "blue")
+hist(df$Fcode, col = "blue")
+hist(df$FirstPurch, col = "blue")
+```
+
+First, we have used as.numeric() function to convert the discretized columns to numeric columns. Then we have used the hist() function to plot them as histograms.
+
+#PROBLEM 4.2
+
+```{r}
+df$Florence<-factor(df$Florence, labels = c("True", "False"))
+
+boxplot(df$Florence, df$M, xlab="Florence", ylab="Monetary", main="Boxplot", horizontal = TRUE, col = "blue")
+boxplot(df$Florence, df$R, xlab="Florence", ylab="Recency", main="Boxplot", horizontal = TRUE, col = "blue")
+boxplot(df$Florence, df$F, xlab="Florence", ylab="Frequency", main="Boxplot", horizontal = TRUE, col = "blue")
+boxplot(df$Florence, df$FirstPurch, xlab="Florence", ylab="First Purchase", main="Boxplot", horizontal = TRUE, col = "blue")
+```
+
+First, we have use the factor() function to convert the Florence column to one with values "TRUE" and "FALSE".
+Then, we have plotted all the 4 numerical columns as boxplots using the boxplot() function.
+
+#PROBLEM 4.3
+
+```{r}
+d1 <- data.frame(df$M)
+ggplot(d1, aes(df$M)) + geom_density(color = "blue", fill = "blue", alpha = 0.5)   
+d2 <- data.frame(df$R)
+ggplot(d2, aes(df$R)) + geom_density(color = "blue", fill = "blue", alpha = 0.5)
+d3 <- data.frame(df$F)
+ggplot(d3, aes(df$F)) + geom_density(color = "blue", fill = "blue", alpha = 0.5)
+d4 <- data.frame(df$FirstPurch)
+ggplot(d4, aes(df$FirstPurch)) + geom_density(color = "blue", fill = "blue", alpha = 0.5)
+```
+
+First, we have converted the columns to dataframes usign data.frame() function.
+Then, we have plotted them as density plots using the ggplot() and geom_density() functions.

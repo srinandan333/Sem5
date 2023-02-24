@@ -1,0 +1,101 @@
+---
+title: "PES1UG20CS596"
+author: "Srinandan A"
+date: "2022-09-17"
+output: pdf_document
+---
+
+```{r}
+#PROBLEM 0
+library(tidyverse)
+library(InformationValue)
+library(caTools)
+df <- read.csv("C:/Users/srina_1pv/Downloads/DA Assignment/2c - Logistic Regression (Lecure Hour 28)/got_characters.csv")
+```
+
+Importing necessary libraries and reading the csv file.
+
+```{r}
+#PROBLEM 1
+nrow(df)
+df[df == ""] <- NA
+na_perc<-(colMeans(is.na(df)))*100
+col_names<-colnames(df)
+df_new<-data.frame(col_names,na_perc)
+```
+
+This data set contains information on 1946 characters from Game of Thrones. 
+
+```{r}
+#PROBLEM 2
+df_new <- subset(df_new, na_perc<80)
+df<-subset(df, select=-c(mother, father, heir, spouse, isAliveMother, isAliveFather, isAliveHeir, isAliveSpouse))
+summary(is.na(df))
+ggplot(df, aes(x = age)) +geom_histogram()
+ggplot(df, aes(x = dateOfBirth)) +geom_histogram()
+df$age[is.na(df$age)] <- median(df$age, na.rm=TRUE)
+df$dateOfBirth[is.na(df$dateOfBirth)] <- median(df$dateOfBirth, na.rm=TRUE)
+
+x<-as.factor(df$house)
+df$house<-unclass(x)
+x<-as.factor(df$title)
+df$title<-unclass(x)
+x<-as.factor(df$culture)
+df$culture<-unclass(x)
+
+df$house[is.na(df$house)] <- -1
+df$title[is.na(df$title)] <- -1
+df$culture[is.na(df$culture)] <- -1
+```
+
+The calculated percentage of missing data for some columns is extremely high. The best way to deal with these many missing data values is to drop the columns entirely. I don't think that the missing data contributes significantly to the target value.
+The age column has a right skewed distribution but is abnormal in terms of the number of characters of age 100. As we can see from the graph, there is a substantial number of characters of age 100.
+
+```{r}
+#PROBLEM 3
+table(df$actual)
+ones <- df[which(df$actual == 1), ]
+zeros <- df[which(df$actual == 0), ]  # all 0's
+
+set.seed(123)  
+ones_train <- sample(1:nrow(ones), 0.7*nrow(zeros)) 
+zeros_train <- sample(1:nrow(zeros), 0.7*nrow(zeros))  
+
+train_ones <- ones[ones_train, ]  
+train_zeros <- zeros[zeros_train, ]
+train_df <- rbind(train_ones, train_zeros)
+train_df <- train_df[sample(1:nrow(train_df)), ]
+
+test_ones <- ones[-ones_train, ]
+test_zeros <- zeros[-zeros_train, ]
+test_df <- rbind(test_ones, test_zeros)
+test_df <- test_df[sample(1:nrow(test_df)), ]
+
+table(train_df$actual)
+table(test_df$actual)
+```
+
+The proportion of the classes of this data set is not the same. It is about 3:1 in favor of actual=1.
+
+```{r}
+#PROBLEM 4
+logistic <- glm(actual ~ age + culture + male + book1 + isMarried + boolDeadRelations + isPopular + popularity, family = binomial(link="logit"), data=train_df)
+summary(logistic)
+
+predicted <- plogis(predict(logistic, test_df))
+cutoff <- optimalCutoff(test_df$actual, predicted)[1] 
+cutoff
+```
+
+Here, we have performed logistic regression on the training data set and used the testing data set to test our model.
+
+```{r}
+#PROBLEM 5
+misClassError(test_df$actual, predicted, threshold = cutoff)
+sensitivity(test_df$actual, predicted, threshold = cutoff)
+specificity(test_df$actual, predicted, threshold = cutoff)
+confusionMatrix(test_df$actual, predicted, threshold = cutoff)
+plotROC(test_df$actual, predicted)
+```
+
+The area under the ROC curve is 0.6738 units.

@@ -1,0 +1,176 @@
+Received poll from zookeeper:1
+Sent heartbeat to zookeeper:BEAT
+Received poll from zookeeper:1
+Sent heartbeat to zookeeper:BEAT
+Connected to: 127.0.0.1 : 43287
+Received type from:127.0.0.1 : 43287
+Sent acknowledgment to:127.0.0.1 : 43287
+Received topic from:127.0.0.1 : 43287
+Sent acknowledgment to:127.0.0.1 : 43287
+Number of producers: 0
+Number of consumers: 1
+Received poll from zookeeper:1
+Sent heartbeat to zookeeper:BEAT
+Connected to: 127.0.0.1 : 43288
+Received type from:127.0.0.1 : 43288
+Sent acknowledgment to:127.0.0.1 : 43288
+Received topic from:127.0.0.1 : 43288
+Sent acknowledgment to:127.0.0.1 : 43288
+Number of producers: 1
+Number of consumers: 1
+Received poll from zookeeper:1
+Sent heartbeat to zookeeper:BEAT
+Received message from:127.0.0.1 : 43288
+Sent acknowledgment to:127.0.0.1 : 43288
+Sent message to:127.0.0.1 : 43288
+Received acknoqledgement from:127.0.0.1 : 43288
+Received message from:127.0.0.1 : 43288
+Sent acknowledgment to:127.0.0.1 : 43288
+Sent message to:127.0.0.1 : 43288
+Received acknoqledgement from:127.0.0.1 : 43288
+Connected to: 127.0.0.1 : 43295
+Received type from:127.0.0.1 : 43295
+Sent acknowledgment to:127.0.0.1 : 43295
+Received topic from:127.0.0.1 : 43295
+Sent acknowledgment to:127.0.0.1 : 43295
+Number of producers: 1
+Number of consumers: 2
+Received poll from zookeeper:1
+Sent heartbeat to zookeeper:BEAT
+Connected to: 127.0.0.1 : 43298
+Received type from:127.0.0.1 : 43298
+Sent acknowledgment to:127.0.0.1 : 43298
+Received topic from:127.0.0.1 : 43298
+Sent acknowledgment to:127.0.0.1 : 43298
+Number of producers: 2
+Number of consumers: 2
+Received poll from zookeeper:1
+Sent heartbeat to zookeeper:BEAT
+Broker 1 failed...Received poll from zookeeper:1
+Sent heartbeat to zookeeper:BEAT
+Received poll from zookeeper:1
+Sent heartbeat to zookeeper:BEAT
+Received poll from zookeeper:1
+Sent heartbeat to zookeeper:BEAT
+Received poll from zookeeper:1
+Sent heartbeat to zookeeper:BEAT
+Received poll from zookeeper:1
+Sent heartbeat to zookeeper:BEAT
+Received poll from zookeeper:1
+Sent heartbeat to zookeeper:BEAT
+Received poll from zookeeper:1
+Sent heartbeat to zookeeper:BEAT
+Received poll from zookeeper:2
+Sent heartbeat to zookeeper:BEAT
+Received poll from zookeeper:2
+Sent heartbeat to zookeeper:BEAT
+Connected to: 127.0.0.1 : 43331
+Received type from:127.0.0.1 : 43331
+Sent acknowledgment to:127.0.0.1 : 43331
+Received topic from:127.0.0.1 : 43331
+Sent acknowledgment to:127.0.0.1 : 43331
+Number of producers: 0
+Number of consumers: 1
+Received poll from zookeeper:2
+Sent heartbeat to zookeeper:BEAT
+Connected to: 127.0.0.1 : 43332
+Received type from:127.0.0.1 : 43332
+Sent acknowledgment to:127.0.0.1 : 43332
+Received topic from:127.0.0.1 : 43332
+Sent acknowledgment to:127.0.0.1 : 43332
+Number of producers: 0
+Number of consumers: 2
+Received poll from zookeeper:2
+Sent heartbeat to zookeeper:BEAT
+Connected to: 127.0.0.1 : 43336
+Received type from:127.0.0.1 : 43336
+Sent acknowledgment to:127.0.0.1 : 43336
+Received topic from:127.0.0.1 : 43336
+Sent acknowledgment to:127.0.0.1 : 43336
+Number of producers: 1
+Number of consumers: 2
+Received poll from zookeeper:2
+Sent heartbeat to zookeeper:BEAT
+Received message from:127.0.0.1 : 43336
+Sent acknowledgment to:127.0.0.1 : 43336
+Sent message to:127.0.0.1 : 43336
+Received acknoqledgement from:127.0.0.1 : 43336
+Broker 2 failed...Received poll from zookeeper:1
+Sent heartbeat to zookeeper:BEAT
+Received poll from zookeeper:1
+Sent heartbeat to zookeeper:BEAT
+Received poll from zookeeper:1
+Sent heartbeat to zookeeper:BEAT
+Received poll from zookeeper:1
+Sent heartbeat to zookeeper:BEAT
+Received poll from zookeeper:1
+Sent heartbeat to zookeeper:BEAT
+Received poll from zookeeper:1
+Sent heartbeat to zookeeper:BEAT
+Received poll from zookeeper:1
+Sent heartbeat to zookeeper:BEAT
+Received poll from zookeeper:2
+Sent heartbeat to zookeeper:BEAT
+Received poll from zookeeper:2
+Sent heartbeat to zookeeper:BEAT
+Received poll from zookeeper:2
+Sent heartbeat to zookeeper:BEAT
+Received poll from zookeeper:2
+Sent heartbeat to zookeeper:BEAT
+Received poll from zookeeper:2
+Sent heartbeat to zookeeper:BEAT
+Received poll from zookeeper:2
+Sent heartbeat to zookeeper:BEAT
+Received poll from zookeeper:3
+Sent heartbeat to zookeeper:BEAT
+Received poll from zookeeper:3
+Sent heartbeat to zookeeper:BEAT
+Connected to: 127.0.0.1 : 43344
+Received type from:127.0.0.1 : 43344
+Sent acknowledgment to:127.0.0.1 : 43344
+Received topic from:127.0.0.1 : 43344
+Sent acknowledgment to:127.0.0.1 : 43344
+Number of producers: 0
+Number of consumers: 1
+Received poll from zookeeper:3
+Sent heartbeat to zookeeper:BEAT
+Connected to: 127.0.0.1 : 43345
+Received type from:127.0.0.1 : 43345
+Sent acknowledgment to:127.0.0.1 : 43345
+Received topic from:127.0.0.1 : 43345
+Sent acknowledgment to:127.0.0.1 : 43345
+Number of producers: 0
+Number of consumers: 2
+Received poll from zookeeper:3
+Sent heartbeat to zookeeper:BEAT
+Connected to: 127.0.0.1 : 43346
+Received type from:127.0.0.1 : 43346
+Sent acknowledgment to:127.0.0.1 : 43346
+Received topic from:127.0.0.1 : 43346
+Sent acknowledgment to:127.0.0.1 : 43346
+Number of producers: 1
+Number of consumers: 2
+Received poll from zookeeper:3
+Sent heartbeat to zookeeper:BEAT
+Received message from:127.0.0.1 : 43346
+Sent acknowledgment to:127.0.0.1 : 43346
+Sent message to:127.0.0.1 : 43346
+Received acknoqledgement from:127.0.0.1 : 43346
+Received message from:127.0.0.1 : 43346
+Sent acknowledgment to:127.0.0.1 : 43346
+Sent message to:127.0.0.1 : 43346
+Received acknoqledgement from:127.0.0.1 : 43346
+Connected to: 127.0.0.1 : 43367
+Received type from:127.0.0.1 : 43367
+Sent acknowledgment to:127.0.0.1 : 43367
+Received topic from:127.0.0.1 : 43367
+Sent acknowledgment to:127.0.0.1 : 43367
+Number of producers: 1
+Sent message to:127.0.0.1 : 43367
+Number of consumers: 3
+Received acknowledgement from:127.0.0.1 : 43367
+Sent message to:127.0.0.1 : 43367
+Received acknowledgement from:127.0.0.1 : 43367
+Received poll from zookeeper:3
+Sent heartbeat to zookeeper:BEAT
+Broker 3 failed...

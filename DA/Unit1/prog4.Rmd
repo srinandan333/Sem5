@@ -1,0 +1,96 @@
+---
+title: "PES1UG20CS596"
+author: "Srinandan A"
+date: "2022-08-28"
+output: word_document
+---
+
+#LOADING LIBRARIES
+
+```{r}
+library(tidyverse)
+library(dplyr)
+library(ggpubr)
+library(ggplot2)
+library(ltm)
+library(psych)
+```
+
+#READING DATA
+
+```{r}
+data<-read.csv("C:/Users/srina_1pv/Downloads/DA Assignment/Correlation Analysis/road_accidents_india_2016.csv")
+```
+
+#PROBLEM 1
+
+```{r}
+data1<-data[grep("Accidents", names(data))]
+data$Total.Accidents<-rowSums(data1)
+data.frame(data$State..UT, data$Total.Accidents)
+
+data2<-data[grep("Killed", names(data))]
+data$Total.Killed<-rowSums(data2)
+data.frame(data$State..UT, data$Total.Killed)
+```
+
+Here, we have used the grep() function to filter out data from the column names that contain the word "Accidents".
+
+#PROBLEM 2
+
+```{r}
+data$Fatality.Rate<-(data$Total.Killed/data$Total.Accidents)
+data$Mist..Foggy...Rate<-(data$Mist..Foggy...Total.Accidents/data$Total.Accidents)
+data.frame(data$State..UT, data$Mist..Foggy...Rate)
+
+a<-data$Mist..Foggy...Rate
+b<-data$Fatality.Rate
+ans<-cor(a, b, method = "pearson")
+
+plot(x = data$Mist..Foggy...Rate, y = data$Fatality.Rate, main = "Scatter plot", xlab = "Misty/Fog Rate", ylab = "Fatality Rate", col = "blue")
+```
+
+Here, we can see that the correlation factor between fatality rate and misty/foggy condition is 0.2935. 
+I couldn't use the ggscatter() function as the package required was not working properly.
+
+#PROBLEM 3
+
+```{r}
+data$Rank.Accidents <- rank(desc(data$Total.Accidents), ties.method="first")
+data3<-data.frame(data$State..UT, data$Rank.Accidents)
+data3[order(data$Rank.Accidents, decreasing = FALSE), ]
+
+data$Rank.Killed <- rank(desc(data$Total.Killed), ties.method="first")
+data4<-data.frame(data$State..UT, data$Rank.Killed)
+data4[order(data$Rank.Killed, decreasing = FALSE), ]
+
+c<-data$Rank.Accidents
+d<-data$Rank.Killed
+res<-cor(c, d, method = "spearman")
+
+t <- (res-0.2)/sqrt((1-(res**2))/(nrow(data)-2))
+print(2*pt(q=t, df=nrow(data), lower.tail = FALSE))
+```
+
+As we can see, the correlation is significantly lesser than 0.2.
+
+#PROBLEM 4
+
+```{r}
+data$Hail.Sleet...Occur<-factor(ifelse(data$Hail.Sleet...Total.Accidents==0,"0","1"))
+biserial.cor(data$Rainy...Total.Accidents, data$Hail.Sleet...Occur)
+data$Dust.Storm...Occur<-factor(ifelse(data$Dust.Storm...Total.Accidents==0,"0","1"))
+
+```
+
+We can see that there exists a -ve correlation between Hail.Sleet...Occur and Total.Accidents.
+
+#PROBLEM 5
+
+```{r}
+df<-data.frame(data$Hail.Sleet...Occur, data$Dust.Storm...Occur)
+matrix<-table(df)
+phi(matrix, digits = 3)
+```
+
+As we can see the phi coefficient obtained is 0.622.

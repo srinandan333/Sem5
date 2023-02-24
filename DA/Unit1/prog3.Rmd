@@ -1,0 +1,174 @@
+---
+title: "PES1UG20CS596"
+author: "Srinandan A"
+date: "2022-08-25"
+output: word_document
+---
+
+#LOADING LIBRARIES
+
+```{r}
+library(ggpubr)
+library(dplyr)
+library(ggplot2)
+library(broom)
+library(car)
+```
+
+We load several required libraries
+
+#READING DATA
+
+We import the given dataset
+
+```{r}
+data1<-read.csv("C:/Users/srina_1pv/OneDrive/Documents/Datasets/Scenario 1.csv")
+```
+
+#CHECKING DATA
+
+To have an idea of what the data look like, we use the function summarise()
+
+```{r}
+group_by(data1, POI) %>%
+  summarise(
+    count = n(),
+    mean = mean(No.of.items, na.rm = TRUE),
+    sd = sd(No.of.items, na.rm = TRUE)
+  )
+```
+
+#VISUALIZING DATA
+
+Here, we’ll use the ggpubr R package for an easy ggplot2-based data visualization.
+
+```{r}
+ggboxplot(data1, x = "POI", y = "No.of.items", col = "blue")
+ggline(data1, x = "POI", y = "No.of.items", col = "blue")
+```
+
+We can see from the box plot that they are not exactly normal distributions but slightly skewed. They are also not significantly different from each other.
+
+#TESTING DATA
+
+```{r}
+with(data1, shapiro.test(No.of.items[POI == "Sonny"]))
+with(data1, shapiro.test(No.of.items[POI == "Fredo"]))
+with(data1, shapiro.test(No.of.items[POI == "Micheal"]))
+with(data1, shapiro.test(No.of.items[POI == "Apollonia"]))
+with(data1, shapiro.test(No.of.items[POI == "Vito"]))
+```
+
+Using the Shapiro-Wilk normality test, we can see that the p values of 1 of the 5 groups are less than 0.05. Hence, it is not a normal distribution but is skewed slightly.
+T test is used for 2 groups but is not advised for >2 groups as you have to run several t tests which can increase the error.
+So we are performing one way anova test since we have 5 groups to compare and one column to compare them with.
+
+#ONE WAY ANOVA TEST
+
+The R function aov() can be used to conduct this test. The function summary.aov() is used to summarize the analysis of variance model.
+Here, we take
+Null Hypothesis: There is no significant difference among the groups.
+Alternate Hypothesis: There is a significant difference among the groups.
+
+```{r}
+res.aov<-aov(No.of.items~POI, data = data1)
+summary(res.aov)
+```
+
+As the p-value is more than the significance level 0.05, we can conclude that there are no significant differences between the groups highlighted with “*" in the model summary.
+
+#TUKEY HSD TEST
+
+As the ANOVA test is significant, we can compute TukeyHSD() for performing multiple pairwise-comparison between the means of groups.
+
+The function TukeyHSD() takes the fitted ANOVA as an argument.
+
+```{r}
+a<-TukeyHSD(res.aov)
+a
+plot(a, col = "blue")
+```
+
+It can be seen from the output, that there is no difference between the groups that is significant as all the p values are greater than 0.05.
+
+#CONCLUSION
+
+In the ANOVA summary, POI row is the numerator and the Residual row is the denominator. The columns denote degrees of freedom, sum of squares and mean of squares in that order.
+Finally, we have f value and the calculated p value. As the p value>0.05, we can conclude that there are no significant differences between the groups/people in POI.
+Hence, we accept the null hypothesis.
+
+#READING DATA
+
+We import the given dataset
+
+```{r}
+data2<-read.csv("C:/Users/srina_1pv/OneDrive/Documents/Datasets/Scenario 2.csv")
+```
+
+#CHECKING DATA
+
+To have an idea of what the data look like and to check for NA values, we use the functions summary() and is.na().
+
+```{r}
+summary(is.na(data2))
+summary(data2)
+```
+
+Since there are no NA values, there is no need for cleaning and we can proceed with the current dataset.
+
+#VISUALIZING DATA
+
+Here, we’ll use the ggpubr R package for an easy ggplot2-based data visualization.
+
+```{r}
+ggboxplot(data2, x = "POI", y = "No.of.items", col = "blue")
+ggline(data2, x = "POI", y = "No.of.items", col = "blue")
+```
+
+Here, we can see that all of them are nearly normal distributions but slightly skewed.
+
+#2 WAY ANOVA TEST
+
+The R function aov() can be used to conduct this test. The function summary.aov() is used to summarize the analysis of variance model.
+Null Hypothesis: There is no significant difference among the groups.
+Alternate Hypothesis: There is a significant difference among the groups.
+
+```{r}
+res.aov2 <- aov(No.of.items ~ Priority + POI, data = data2)
+summary(res.aov2)
+```
+
+From the ANOVA table we can conclude that both Priority and POI are statistically significant. Priority is the most significant factor variable.
+This test makes an assumption that the two factor variables are independent.
+
+#2 WAY ANOVA TEST WITH INTERACTION
+
+If these two variables might interact to create an synergistic effect, we can conduct the test as follows.
+
+```{r}
+res.aov3 <- aov(No.of.items ~ Priority * POI, data = data2)
+res.aov3 <- aov(No.of.items ~ Priority + POI + Priority:POI, data = data2)
+summary(res.aov3)
+```
+
+It can be seen that the two main effects (Priority and POI) are statistically significant but their interaction is not.
+
+#TUKEY HSD TEST
+
+As the ANOVA test is significant, we can compute TukeyHSD() for performing multiple pairwise-comparison between the means of groups. The function TukeyHSD() takes the fitted ANOVA as an argument.
+
+```{r}
+b<-TukeyHSD(res.aov3, which = "POI")
+plot(b, col = "blue")
+c<-TukeyHSD(res.aov3, which = "Priority")
+plot(c, col = "blue")
+```
+
+It can be seen from the output, that all pairwise comparisons in POI are not significant with an adjusted p-value > 0.05.
+It can be seen from the output, that some pairwise comparisons (high-critical, low-critical, med-critical) in Priority are significant with an adjusted p-value < 0.05.
+
+#CONCLUSION
+
+In the ANOVA summary, POI row and Priority row are the numerators and the Residual row is the denominator. The columns denote degrees of freedom, sum of squares and mean of squares in that order. 
+Finally, we have f value for and the calculated p value. As the p value<0.05, we can conclude that there are significant differences between the groups.
+Hence, we reject the null hypothesis and accept the alternate hypothesis.
