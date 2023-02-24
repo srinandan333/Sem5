@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> DBMS Project </title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    </head>
+
+    <body>
+        <div class="logo" style="background-color: #31d2f2;" >
+            <div>
+                <table>
+                    <tr>
+                        <td width="1200px" style="font-size:50px" align="center">
+                            <font color="#000"> Hospital Management System </font>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <form name="f1" action = "auth.php" onsubmit = "return validation()" method = "POST" class="card" style="width:100%; padding-left: 400px; padding-top: 150px; padding-right: 400px; border-color: white;">
+            <div class="card-header">
+                Login Portal
+            </div><br>
+            
+            <div class="form-outline ml-2" class="card-body">
+                <label class="form-label" >Email address</label>
+                <input type="email" name="email" class="form-control" /> 
+            </div>
+
+            <div class="form-outline mb-4" class="card-body">
+                <label class="form-label" >Password</label>
+                <input type="password" name="password" class="form-control" />
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block mb-4" class="card-body">Sign in</button>
+        </form>
+
+        <script>  
+            function validation()  
+            {  
+                var id=document.f1.email.value;  
+                var ps=document.f1.password.value;  
+                if(id.length=="" && ps.length=="") 
+                {  
+                    alert("Email and Password fields are empty");  
+                    return false;  
+                }  
+                else  
+                {  
+                    if(id.length=="") 
+                    {  
+                        alert("Email is empty");  
+                        return false;  
+                    }   
+                    if (ps.length=="") 
+                    {  
+                        alert("Password field is empty");  
+                        return false;  
+                    }  
+                }                             
+            }  
+        </script>
+    </body>
+</html>
